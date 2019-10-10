@@ -1,0 +1,13 @@
+org/viralscale/common/storage/DataStorage.class
+org/viralscale/common/kafka/KafkaReceiver.class
+org/viralscale/common/utils/RegexUtils.class
+org/viralscale/common/models/DataModel.class
+org/viralscale/common/crawlers/token/PassThroughTokenProvider.class
+org/viralscale/common/crawlers/CrawlerStorage.class
+org/viralscale/common/crawlers/BaseCrawler.class
+org/viralscale/common/crawlers/CrawlerConfig.class
+org/viralscale/common/kafka/KafkaTopic.class
+org/viralscale/common/kafka/KafkaMessenger.class
+org/viralscale/common/utils/JSONUtils.class
+org/viralscale/common/crawlers/token/TokenProvider.class
+org/viralscale/common/crawlers/AbstractAPIService.class
