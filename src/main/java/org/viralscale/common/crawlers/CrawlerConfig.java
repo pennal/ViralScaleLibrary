@@ -19,4 +19,9 @@ public abstract class CrawlerConfig {
             return "UNPARSABLE_CONFIG";
         }
     }
+
+    @Override
+    public String toString() {
+        return this.toJson();
+    }
 }

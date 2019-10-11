@@ -1,16 +1,18 @@
 package org.viralscale.common.crawlers;
 
-public abstract class BaseCrawler<T extends CrawlerConfig, U> {
+public abstract class BaseCrawler<T extends CrawlerConfig, U, V extends ConfigLoader<T>> {
     protected CrawlerStorage<U> storage;
+    protected V configLoader;
     protected T config;
 
     private BaseCrawler() {
 
     }
 
-    public BaseCrawler(T config) {
+    public BaseCrawler(V configLoader) {
         this.storage = new CrawlerStorage<>();
-        this.config = config;
+        this.configLoader = configLoader;
+        this.config = configLoader.loadConfiguration();
 
         System.out.println("Crawler instantiated with options: " + config.toJson());
     }
@@ -21,4 +23,7 @@ public abstract class BaseCrawler<T extends CrawlerConfig, U> {
     public void markPostAsInactive(U post) {
         this.storage.markAsInactive(post);
     };
+    public T getConfig() {
+        return this.config;
+    }
 }
