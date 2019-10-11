@@ -24,7 +24,7 @@ public class KafkaMessenger {
         Properties initProperties = new Properties();
 
         try {
-            ConfigReader configReader = new ConfigReader("config/kafka.properties");
+            ConfigReader configReader = new ConfigReader("/config/kafka.properties");
             configReader.readFile();
 
             // Parse props
