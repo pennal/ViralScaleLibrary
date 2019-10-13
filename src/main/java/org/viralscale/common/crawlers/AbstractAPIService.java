@@ -44,6 +44,7 @@ public abstract class AbstractAPIService {
             res = client.newCall(req).execute();
         } catch (IOException e) {
             logger.error("COULD NOT EXECUTE CALL!");
+            e.printStackTrace();
         }
 
         // TODO: Parse the request limit
