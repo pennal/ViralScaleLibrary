@@ -12,7 +12,7 @@ import org.viralscale.common.crawlers.token.TokenProvider;
 import java.io.IOException;
 
 public abstract class AbstractAPIService {
-    Logger logger = LoggerFactory.getLogger(AbstractAPIService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractAPIService.class);
 
     private OkHttpClient client;
     private TokenProvider tokenProvider;
@@ -28,7 +28,7 @@ public abstract class AbstractAPIService {
     }
 
     protected Response call(HttpUrl url) {
-        System.out.println("[ViralScaleLibrary] - call() executed with url " + url.toString());
+        logger.debug("call() executed with url " + url.toString());
         // Launch the actual request
         Request req = new Request.Builder()
                 .url(url)
