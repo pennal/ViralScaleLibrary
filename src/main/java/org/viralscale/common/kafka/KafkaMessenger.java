@@ -3,6 +3,9 @@ package org.viralscale.common.kafka;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.viralscale.common.crawlers.AbstractAPIService;
 import org.viralscale.common.utils.config.ConfigReader;
 
 import java.io.IOException;
@@ -10,6 +13,8 @@ import java.util.Map;
 import java.util.Properties;
 
 public class KafkaMessenger {
+    private static final Logger logger = LoggerFactory.getLogger(KafkaMessenger.class);
+
     private KafkaProducer<String, byte[]> producer;
 
     public static final String KAFKA_SERVER_URL = "localhost";
@@ -46,7 +51,7 @@ public class KafkaMessenger {
                 "server_port", KAFKA_SERVER_PORT,
                 "server_client_id", CLIENT_ID
             ));
-            System.err.println("Initializing Kafka with DEFAULTS!");
+            logger.warn("Initializing Kafka with DEFAULTS!");
         }
 
 
@@ -59,7 +64,7 @@ public class KafkaMessenger {
         properties.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         producer = new KafkaProducer<>(properties);
 
-        System.out.println("Kafka initialized with: " + initProperties.toString());
+        logger.debug("Kafka initialized with: " + initProperties.toString());
 
 
     }

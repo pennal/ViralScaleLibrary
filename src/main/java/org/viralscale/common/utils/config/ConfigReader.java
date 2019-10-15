@@ -1,5 +1,8 @@
 package org.viralscale.common.utils.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -9,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConfigReader {
+    private static final Logger logger = LoggerFactory.getLogger(ConfigReader.class);
+
     private String filepath;
     private Properties properties;
 
@@ -20,6 +25,14 @@ public class ConfigReader {
     }
 
     public void readFile() throws IOException {
+        // Check if the path contains an initial slash
+        if (this.filepath.charAt(0) == '/') {
+            // Start by checking if the original file exists
+            this.filepath = Files.exists(Paths.get(this.filepath)) ? this.filepath : this.filepath.substring(1);
+        }
+
+        logger.info("Loading config at path " + this.filepath);
+
         InputStream inputStream = Files.newInputStream(Paths.get(this.filepath));
 
         properties.load(inputStream);

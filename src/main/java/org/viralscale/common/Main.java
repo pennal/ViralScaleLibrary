@@ -13,17 +13,20 @@
 //import java.time.LocalDateTime;
 //
 //public class Main {
-//    public static void main(String[] args) throws IOException {
-//        ConfigReader r = new ConfigReader("kafka.properties");
-//        r.readFile();
 //
+//    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 //
-//        KafkaMessenger.getInstance().sendMessage(KafkaTopic.CRAWLED_POST, "helloWorld", "AA".getBytes(), new Callback() {
-//            @Override
-//            public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-//                System.out.println(recordMetadata);
-//            }
-//        });
+//    public static void main(String[] args) throws IOException, InterruptedException {
+//        //ConfigReader r = new ConfigReader("kafka.properties");
+//        //r.readFile();
+//        //
+//        //
+//        //KafkaMessenger.getInstance().sendMessage(KafkaTopic.CRAWLED_POST, "helloWorld", "AA".getBytes(), new Callback() {
+//        //    @Override
+//        //    public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+//        //        System.out.println(recordMetadata);
+//        //    }
+//        //});
 //
 //
 //    }

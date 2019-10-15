@@ -57,7 +57,7 @@ public class KafkaReceiver {
                     "server_port", KAFKA_SERVER_PORT,
                     "server_client_id", CLIENT_ID
             ));
-            System.err.println("Initializing Kafka with DEFAULTS!");
+            logger.warn("Initializing Kafka with DEFAULTS!");
         }
 
 
@@ -75,7 +75,7 @@ public class KafkaReceiver {
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put("group.id", "viralscale-" + clientID);
 
-        System.out.println("Kafka initialized with: " + initProperties.toString());
+        logger.debug("Kafka initialized with: " + initProperties.toString());
 
         consumer = new KafkaConsumer<>(properties);
         this.topics = topics.stream().map(t -> t.getTopic()).collect(Collectors.toList());
