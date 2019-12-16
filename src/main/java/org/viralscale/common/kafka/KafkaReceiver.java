@@ -72,7 +72,9 @@ public class KafkaReceiver {
         properties.put("max.poll.records", "1");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.put("group.id", "viralscale");
+
+        // Group id is composed by viralscale-<CLIENT_ID>
+        properties.put("group.id", "viralscale-" + initProperties.get("server_client_id"));
 
         logger.debug("Kafka initialized with: " + properties.toString());
 
