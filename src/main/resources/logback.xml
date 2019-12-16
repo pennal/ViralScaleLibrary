@@ -21,6 +21,11 @@
         </encoder>
     </appender>
 
+    <!-- We don't want kafka to create too much noise -->
+    <logger name="org.apache.kafka" level="WARN"/>
+    <logger name="org.apache.kafka.common.metrics" level="WARN"/>
+
+    <!-- We set the level to trace so we have EVERY possible message -->
     <root level="TRACE">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
