@@ -12,10 +12,7 @@ import org.viralscale.common.utils.config.ConfigReader;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -26,12 +23,12 @@ public class KafkaReceiver {
 
     public static final String KAFKA_SERVER_URL = "localhost";
     public static final int KAFKA_SERVER_PORT = 9092;
-    public static final String CLIENT_ID = "FilterProducer";
+    public static final String CLIENT_ID = "DEFAULT_RECEIVER__" + UUID.randomUUID().toString();
 
 
     private boolean shouldRun;
 
-    public KafkaReceiver(List<KafkaTopic> topics, String clientID) {
+    public KafkaReceiver(List<KafkaTopic> topics) {
         Properties initProperties = new Properties();
 
         try {
@@ -41,8 +38,10 @@ public class KafkaReceiver {
             // Parse props
             String kafkaServerUrl = configReader.getValue("kafka.server.url", KAFKA_SERVER_URL);
             Integer kafkaServerPort = configReader.getValueAsInteger("kafka.server.port", KAFKA_SERVER_PORT);
-            String kafkaClientId = configReader.getValue("kafka.client.id", KAFKA_SERVER_URL);
+            String kafkaClientId = configReader.getValue("kafka.client.id", CLIENT_ID);
 
+            // The client id must be unique. What we do is simply add a UUID
+            kafkaClientId += "__" + UUID.randomUUID().toString();
 
             initProperties.putAll(Map.of(
                     "server_url", kafkaServerUrl,
@@ -73,9 +72,9 @@ public class KafkaReceiver {
         properties.put("max.poll.records", "1");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        properties.put("group.id", "viralscale-" + clientID);
+        properties.put("group.id", "viralscale");
 
-        logger.debug("Kafka initialized with: " + initProperties.toString());
+        logger.debug("Kafka initialized with: " + properties.toString());
 
         consumer = new KafkaConsumer<>(properties);
         this.topics = topics.stream().map(t -> t.getTopic()).collect(Collectors.toList());
