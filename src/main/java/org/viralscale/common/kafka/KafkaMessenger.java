@@ -5,12 +5,12 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.viralscale.common.crawlers.AbstractAPIService;
 import org.viralscale.common.utils.config.ConfigReader;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 public class KafkaMessenger {
     private static final Logger logger = LoggerFactory.getLogger(KafkaMessenger.class);
@@ -19,7 +19,7 @@ public class KafkaMessenger {
 
     public static final String KAFKA_SERVER_URL = "localhost";
     public static final Integer KAFKA_SERVER_PORT = 9092;
-    public static final String CLIENT_ID = "FilterProducer";
+    public static final String CLIENT_ID = "DEFAULT_PRODUCER__" + UUID.randomUUID().toString();
 
     private static KafkaMessenger instance;
 
@@ -35,8 +35,10 @@ public class KafkaMessenger {
             // Parse props
             String kafkaServerUrl = configReader.getValue("kafka.server.url", KAFKA_SERVER_URL);
             Integer kafkaServerPort = configReader.getValueAsInteger("kafka.server.port", KAFKA_SERVER_PORT);
-            String kafkaClientId = configReader.getValue("kafka.client.id", KAFKA_SERVER_URL);
+            String kafkaClientId = configReader.getValue("kafka.client.id", CLIENT_ID);
 
+            // The client id must be unique. What we do is simply add a UUID
+            kafkaClientId += "__" + UUID.randomUUID().toString();
 
             initProperties.putAll(Map.of(
                     "server_url", kafkaServerUrl,
@@ -64,9 +66,7 @@ public class KafkaMessenger {
         properties.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
         producer = new KafkaProducer<>(properties);
 
-        logger.debug("Kafka initialized with: " + initProperties.toString());
-
-
+        logger.debug("Kafka initialized with: " + properties.toString());
     }
 
 
