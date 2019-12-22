@@ -64,8 +64,8 @@ public class KafkaReceiver {
         Properties properties = new Properties();
         properties.put("bootstrap.servers", initProperties.get("server_url") + ":" + initProperties.get("server_port"));
         properties.put("client.id", initProperties.get("server_client_id"));
-        properties.put("zookeeper.session.timeout.ms", "6000");
-        properties.put("zookeeper.sync.time.ms","2000");
+        //properties.put("zookeeper.session.timeout.ms", "6000");
+        //properties.put("zookeeper.sync.time.ms","2000");
         properties.put("auto.commit.enable", "false");
         properties.put("auto.commit.interval.ms", "1000");
         properties.put("consumer.timeout.ms", "-1");
