@@ -3,6 +3,20 @@
         <encoder>
             <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) --- [%thread] %cyan(%logger{35}): %m%n</Pattern>
         </encoder>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- If it comes from kafka, we want to DENY IT-->
+                <expression>
+                    if (logger.contains("org.apache.kafka")) {
+                        return level >= WARN;
+                    }
+
+                    return level >= INFO;
+                </expression>
+            </evaluator>
+            <OnMismatch>DENY</OnMismatch>
+            <OnMatch>NEUTRAL</OnMatch>
+        </filter>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -19,15 +33,28 @@
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] %logger{35}: %m%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator> <!-- defaults to type ch.qos.logback.classic.boolex.JaninoEventEvaluator -->
+                <!-- If it comes from kafka, we want to DENY IT-->
+                <expression>
+                    if (logger.contains("org.apache.kafka")) {
+                        return level >= INFO;
+                    }
+
+                    return true;
+                </expression>
+            </evaluator>
+            <OnMismatch>DENY</OnMismatch>
+            <OnMatch>NEUTRAL</OnMatch>
+        </filter>
     </appender>
 
-    <!-- We don't want kafka to create too much noise -->
-    <logger name="org.apache.kafka" level="WARN"/>
-    <logger name="org.apache.kafka.common.metrics" level="WARN"/>
 
     <!-- We set the level to trace so we have EVERY possible message -->
     <root level="TRACE">
+        <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
     </root>
+
+<!--    <logger name="org.apache.kafka.common.metrics" level="TRACE"/>-->
 </configuration>
