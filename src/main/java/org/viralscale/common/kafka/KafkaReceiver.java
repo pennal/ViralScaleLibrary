@@ -98,7 +98,7 @@ public class KafkaReceiver {
 
         consumer.commitSync(commitMessage);
 
-        logger.info("Record with key " + record.key() + " committed");
+        logger.debug("Record with key " + record.key() + " committed");
     }
 
     public void runSingleWorker(Consumer<ConsumerRecord<String, byte[]>> callback) {
