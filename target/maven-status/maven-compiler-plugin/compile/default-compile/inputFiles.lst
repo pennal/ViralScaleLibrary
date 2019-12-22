@@ -8,8 +8,10 @@
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/crawlers/token/TokenProvider.java
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/utils/RegexUtils.java
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/filters/AbstractFilter.java
+/Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/utils/config/ConfigReader.java
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/kafka/KafkaMessenger.java
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/crawlers/CrawlerStorage.java
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/utils/JSONUtils.java
+/Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/crawlers/ConfigLoader.java
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/kafka/KafkaReceiver.java
 /Users/Lucas/Documents/Repos/MasterThesis/code/ViralScaleLibrary/src/main/java/org/viralscale/common/storage/DataStorage.java
