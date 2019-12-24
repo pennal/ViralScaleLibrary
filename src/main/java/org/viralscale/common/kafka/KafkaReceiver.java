@@ -13,10 +13,11 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class KafkaReceiver {
+public class KafkaReceiver implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(KafkaReceiver.class);
     private final KafkaConsumer<String, byte[]> consumer;
     private final List<String> topics;
@@ -25,10 +26,11 @@ public class KafkaReceiver {
     public static final int KAFKA_SERVER_PORT = 9092;
     public static final String CLIENT_ID = "DEFAULT_RECEIVER__" + UUID.randomUUID().toString();
 
+    private final AtomicBoolean running;
+    private Thread worker;
+    private Consumer<ConsumerRecord<String, byte[]>> callback;
 
-    private boolean shouldRun;
-
-    public KafkaReceiver(List<KafkaTopic> topics) {
+    public KafkaReceiver(List<KafkaTopic> topics, Consumer<ConsumerRecord<String, byte[]>> messageCallback) {
         Properties initProperties = new Properties();
 
         try {
@@ -80,14 +82,47 @@ public class KafkaReceiver {
 
         consumer = new KafkaConsumer<>(properties);
         this.topics = topics.stream().map(t -> t.getTopic()).collect(Collectors.toList());
-
         consumer.subscribe(this.topics);
 
-        this.shouldRun = true;
+        this.callback = messageCallback;
+
+        // Create the needed thread data
+        this.running = new AtomicBoolean(false);
+        this.worker = new Thread(this);
+
     }
 
-    public void kill() {
-        this.shouldRun = false;
+    public void start() {
+        logger.info("Starting receiver with topics [" + String.join(", ", this.topics) + "]");
+        this.worker.start();
+    }
+
+    public void stop() {
+        logger.info("Stopping receiver thread");
+        this.running.set(false);
+    }
+
+    public void interrupt() {
+        this.running.set(false);
+        this.worker.interrupt();
+    }
+
+
+    @Override
+    public void run() {
+        this.running.set(true);
+        Duration t = Duration.of(1000, ChronoUnit.MILLIS);
+        while (running.get()) {
+            ConsumerRecords<String, byte[]> records = consumer.poll(t);
+
+            records.forEach(record -> {
+                // First ack the message
+                acknowledge(record);
+                // Apply the function chosen by the user
+                callback.accept(record);
+            });
+        }
+        logger.warn("Exiting receiver thread");
     }
 
     public void acknowledge(ConsumerRecord<String, byte[]> record) {
@@ -99,35 +134,5 @@ public class KafkaReceiver {
         consumer.commitSync(commitMessage);
 
         logger.debug("Record with key " + record.key() + " committed");
-    }
-
-    public void runSingleWorker(Consumer<ConsumerRecord<String, byte[]>> callback) {
-
-        Duration t = Duration.of(1000, ChronoUnit.MILLIS);
-        while (shouldRun) {
-
-            ConsumerRecords<String, byte[]> records = consumer.poll(t);
-
-            records.forEach(record -> {
-                // First ack the message
-                acknowledge(record);
-                // Apply the function chosen by the user
-                callback.accept(record);
-            });
-        }
-    }
-
-    public void runSingleWorkerWithoutAck(Consumer<ConsumerRecord<String, byte[]>> callback) {
-
-        Duration t = Duration.of(1000, ChronoUnit.MILLIS);
-        while (true) {
-
-            ConsumerRecords<String, byte[]> records = consumer.poll(t);
-
-            records.forEach(record -> {
-                // Apply the function chosen by the user
-                callback.accept(record);
-            });
-        }
     }
 }
