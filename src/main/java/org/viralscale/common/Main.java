@@ -3,6 +3,8 @@
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //import org.apache.kafka.clients.producer.Callback;
 //import org.apache.kafka.clients.producer.RecordMetadata;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 //import org.viralscale.common.kafka.KafkaMessenger;
 //import org.viralscale.common.kafka.KafkaTopic;
 //import org.viralscale.common.models.DataModel;
@@ -14,7 +16,8 @@
 //
 //public class Main {
 //
-//    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+//    private static final Logger kf = LoggerFactory.getLogger(org.apache.kafka.clients.consumer.ConsumerConfig.class);
+//    private static final Logger vs = LoggerFactory.getLogger(Main.class);
 //
 //    public static void main(String[] args) throws IOException, InterruptedException {
 //        //ConfigReader r = new ConfigReader("kafka.properties");
@@ -27,7 +30,5 @@
 //        //        System.out.println(recordMetadata);
 //        //    }
 //        //});
-//
-//
 //    }
 //}
