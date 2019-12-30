@@ -103,7 +103,8 @@ public class KafkaReceiver implements Runnable {
     }
 
     public void interrupt() {
-        this.running.set(false);
+        logger.info("Interrupt called");
+        this.stop();
         this.worker.interrupt();
     }
 
@@ -122,6 +123,8 @@ public class KafkaReceiver implements Runnable {
                 callback.accept(record);
             });
         }
+        this.worker = null;
+        this.consumer.close();
         logger.warn("Exiting receiver thread");
     }
 
